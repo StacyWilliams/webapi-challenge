@@ -60,8 +60,8 @@ server.get("/", (req, res) => {
 });
 
 // The R in CRUD
-server.get('/chores', function(req, res) {
-    Hubs.find()
+server.get('chores', function(req, res) {
+    chores.find()
       .then(chores => {
         res.status(200).json(chores);
       })
@@ -71,7 +71,7 @@ server.get('/chores', function(req, res) {
   });
   
   // The C in CRUD
-  server.post('/chores', (req, res) => {
+  server.post('chores', (req, res) => {
     // axios.post(url, data) < data shows up as req.body
     const choresInfo = req.body;
     console.log(choresInfo);
@@ -86,15 +86,15 @@ server.get('/chores', function(req, res) {
   });
   
   // the D
-  server.delete('/people/:id', (req, res) => {
+  server.delete('chores/:id', (req, res) => {
     const { id } = req.params;
   
-    people.remove(id)
+    chores.remove(id)
       .then(deleted => {
         if (deleted) {
           res.status(204).end();
         } else {
-          res.status(404).json({ message: "can't find that person" });
+          res.status(404).json({ message: "can't find that chore" });
         }
       })
       .catch(error => {
@@ -103,7 +103,7 @@ server.get('/chores', function(req, res) {
   });
   
   // the U
-  server.put('/chores/:id', (req, res) => {
+  server.put('chores/:id', (req, res) => {
     const id = req.params.id;
     const changes = req.body;
   

@@ -24,100 +24,57 @@ let people = [
       },
 ];
 
-let chores = [
-    {
-      id: 1,
-      description: 'Wash dishes',
-      notes: 'load and unload plus wipe down counters',
-      assignedTo: 1, // the id of Frodo,
-      completed: true
-    },
-    {
-      id: 2,
-      description: 'laundry',
-      notes: 'wash, dry, fold, and put away neatly',
-      assignedTo: 2,
-      completed: false
-    },
-    {
-        id: 3,
-        description: 'Vacuumn',
-        notes: 'carpet and rugs in all rooms appliciable',
-        assignedTo: 3, // the id of Frodo,
-        completed: false
-      },
-      {
-        id: 4,
-        description: 'Trash and Brush Dog',
-        notes: 'take out kitchen and bathroom trash, replace bags, and brush out Laocha',
-        assignedTo: 3,
-        completed: false
-      },
-  ]
+let chores = [];
+let choreId = 1;
+
+
+server.get("/chores", (req, res) => {
+
+    const completed = req.query.completed;
+    if(completed === "true") {
+        res.send(200).json(chores.completed)
+    }else{
+        if(completed !== "true") {
+            res.send(200).json(!chores.completed)
+        }
+    }  
+    }
+  ); //endpoint working sort of...just returns 'ok'
 
 server.get("/", (req, res) => {
-  res.status(200).json({ message: "It's working!!"})
+    res.status(200).json({message: "It's working"})
+  }); //endpoint is working
+
+
+server.get("/chores/:id", (req, res) => {
+    const chore = chores.find(chore => choreId === (req.params.id))
+
+    if(chore) {
+        res.status(200).json(chore.id)//this doesn't work
+    }else{
+        res.status(404).json({ message: "chore not found"})//this works
+    }
 });
 
-// The R in CRUD
-server.get('chores', function(req, res) {
-    chores.find()
-      .then(chores => {
-        res.status(200).json(chores);
-      })
-      .catch(error => {
-        res.status(500).json(error);
-      });
-  });
+
+server.post("/chores", (req, res) => {
+    const chore = req.body;
+    chore.id = choreId;
+    choreId = choreId + 1;
+    chores.push(chore); 
+    res.status(201).json({chores});
+}); //endpoint works
+
+server.put("/chores", (req, res) => {
+    
+
+});
+
+server.delete("/chores/:id", (req, res) => {
   
-  // The C in CRUD
-  server.post('chores', (req, res) => {
-    // axios.post(url, data) < data shows up as req.body
-    const choresInfo = req.body;
-    console.log(choresInfo);
-  
-    chores.add(choresInfo)
-      .then(hub => {
-        res.status(201).json(chores);
-      })
-      .catch(error => {
-        res.status(500).json(error);
-      });
-  });
-  
-  // the D
-  server.delete('chores/:id', (req, res) => {
-    const { id } = req.params;
-  
-    chores.remove(id)
-      .then(deleted => {
-        if (deleted) {
-          res.status(204).end();
-        } else {
-          res.status(404).json({ message: "can't find that chore" });
-        }
-      })
-      .catch(error => {
-        res.status(500).json(error);
-      });
-  });
-  
-  // the U
-  server.put('chores/:id', (req, res) => {
-    const id = req.params.id;
-    const changes = req.body;
-  
-    chores.update(id, changes)
-      .then(updated => {
-        if (updated) {
-          res.status(200).json(updated);
-        } else {
-          res.status(404).json({ message: "can't find that chore" });
-        }
-      })
-      .catch(error => {
-        res.status(500).json(error);
-      });
-  });
+
+});
+
+
 
 module.exports = server;

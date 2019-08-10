@@ -26,9 +26,12 @@ let people = [
 
 let chores = [];
 
+server.get("/", (req, res) => {
+    res.status(200).json({message: "webapi-challenge"})
+  }); //endpoint is working
 
 
-server.get("/chores", (req, res) => {
+  server.get("/chores", (req, res) => {
 
     const completed = req.query.completed;
     if(completed === "true") {
@@ -43,16 +46,12 @@ server.get("/chores", (req, res) => {
     }
   ); //endpoint working sort of...just returns 'ok'
 
-server.get("/", (req, res) => {
-    res.status(200).json({message: "It's working"})
-  }); //endpoint is working
 
-
-server.get("/chores/:id", (req, res) => {
+  server.get("/chores/:id", (req, res) => {
     const chore = chores.find(chore => choreId === (req.params.id))
 
     if(chore) {
-        res.status(200).json(chore.id)//this doesn't work
+        res.status(200).json(choreId)//this doesn't work
     }else{
         res.status(404).json({ message: "chore not found"})//this works
     }

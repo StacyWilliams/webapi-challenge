@@ -25,7 +25,7 @@ let people = [
 ];
 
 let chores = [];
-let choreId = 1;
+
 
 
 server.get("/chores", (req, res) => {
@@ -34,8 +34,10 @@ server.get("/chores", (req, res) => {
     if(completed === "true") {
         res.send(200).json(chores.completed)
     }else{
-        if(completed !== "true") {
+        if(completed === "true") {
             res.send(200).json(!chores.completed)
+        }else{
+            res.send(200).json(chores)
         }
     }  
     }
@@ -58,12 +60,22 @@ server.get("/chores/:id", (req, res) => {
 
 
 server.post("/chores", (req, res) => {
-    const chore = req.body;
-    chore.id = choreId;
-    choreId = choreId + 1;
-    chores.push(chore); 
-    res.status(201).json({chores});
-}); //endpoint works
+    const chore = {
+        id: chores.length + 1,
+        description: req.body.description,
+        notes: req.body.notes,
+        assignedTo: req.body.assignedTo,
+        completed: "false"
+    }
+     
+    if(chore.id){
+        chores.push(chore);
+        res.status(201).json({chores});
+    }else{
+        res.status(400).json({message: "please provide a chore"})
+    }
+   
+}); 
 
 server.put("/chores", (req, res) => {
     
